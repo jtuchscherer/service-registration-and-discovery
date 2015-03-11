@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,8 +39,8 @@ class PhotoRestController {
     private GridFsTemplate gridFsTemplate;
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
-    ResponseEntity<?> set(String userId,
-                          @RequestParam MultipartFile multipartFile,
+    ResponseEntity<?> set(@PathVariable String userId,
+                            @RequestParam MultipartFile multipartFile,
                           UriComponentsBuilder uriBuilder) throws IOException {
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
@@ -52,7 +53,7 @@ class PhotoRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<Resource> get(String userId) {
+    ResponseEntity<Resource> get(@PathVariable String userId) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(

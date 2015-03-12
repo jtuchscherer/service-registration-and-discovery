@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+
+if [ "$1" != "" ]; then
+    case $1 in
+        -f | --force )    force=1
+                          ;;
+        * )               force=0
+                          ;;
+    esac
+fi
+
 #
 # the big CloudFoundry installer
 #
@@ -69,10 +79,25 @@ function reset(){
   cf delete-orphaned-routes
 }
 
+function force_reset(){
+  cf d -f -r eureka-service
+  cf d -f -r photo-service
+  cf d -f -r passport-service
+  cf d -f -r bookmark-service
+  cf ds -f photo-service-mongodb
+  cf ds -f bookmark-service-postgresql
+  cf ds -f eureka-service
+}
+
 mvn -DskipTests=true clean install
 
 login
-reset
+if [[ $force -eq 1 ]]; then
+    echo "Non Interactive Force Resetting of all apps"
+    force_reset
+else
+    reset
+fi
 deploy_eureka
 deploy_photo_service
 deploy_bookmark_service

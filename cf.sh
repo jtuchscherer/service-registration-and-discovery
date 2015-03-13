@@ -29,14 +29,9 @@ function app_domain(){
 }
 
 function deploy_app(){
-
   APP_NAME=$1
   cd $APP_NAME
-  cf push $APP_NAME  --no-start 
-  APPLICATION_DOMAIN=`app_domain $APP_NAME`
-  echo determined that application_domain for $APP_NAME is $APPLICATION_DOMAIN.
-  cf env $APP_NAME | grep APPLICATION_DOMAIN || cf set-env $APP_NAME APPLICATION_DOMAIN $APPLICATION_DOMAIN
-  cf restart $APP_NAME
+  cf push $APP_NAME
   cd ..
 }
 
@@ -52,6 +47,14 @@ function deploy_eureka() {
   NAME=eureka-service
   deploy_app $NAME
   deploy_service $NAME
+}
+
+function deploy_eureka_peer(){
+  DIR_NAME=eureka-service
+  APP_NAME=eureka-peer-service
+  cd $DIR_NAME
+  cf push $APP_NAME
+  cd ..
 }
 
 function deploy_photo_service(){
@@ -70,6 +73,7 @@ function deploy_passport_service(){
 
 function reset(){
   cf d eureka-service
+  cf d eureka-peer-service
   cf d photo-service
   cf d passport-service
   cf d bookmark-service
@@ -81,6 +85,7 @@ function reset(){
 
 function force_reset(){
   cf d -f -r eureka-service
+  cf d -f -r eureka-peer-service
   cf d -f -r photo-service
   cf d -f -r passport-service
   cf d -f -r bookmark-service
@@ -99,6 +104,7 @@ else
     reset
 fi
 deploy_eureka
+deploy_eureka_peer
 deploy_photo_service
 deploy_bookmark_service
 deploy_passport_service

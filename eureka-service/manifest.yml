@@ -4,9 +4,22 @@ applications:
   memory: 512M
   instances: 1
   host: eureka-service-${random-word}
-  domain: cfapps.io
   path: target/eureka-service.jar
   env:
     SPRING_PROFILES_ACTIVE: cloud
+    DEBUG: "true"
+    debug: "true"
+
+
+- name: eureka-peer-service
+  memory: 512M
+  instances: 3
+  host: eureka-peer-service-${random-word}
+  domain: cfapps.io
+  path: target/eureka-service.jar
+  services:
+    - eureka-service
+  env:
+    SPRING_PROFILES_ACTIVE: cloud peer
     DEBUG: "true"
     debug: "true"

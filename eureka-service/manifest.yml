@@ -20,6 +20,6 @@ applications:
   services:
     - eureka-service
   env:
-    SPRING_PROFILES_ACTIVE: cloud peer
+    SPRING_PROFILES_ACTIVE: "cloud,peer"
     DEBUG: "true"
     debug: "true"

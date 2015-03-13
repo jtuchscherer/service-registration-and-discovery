@@ -5,8 +5,8 @@ eureka:
   instance:
     hostname: ${vcap.application.uris[0]}
   client:
-    registerWithEureka: false
-    fetchRegistry: false
+    registerWithEureka: true
+    fetchRegistry: true
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}/eureka/
 
@@ -15,6 +15,8 @@ eureka:
 spring:
   profiles: peer
 eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]}
   client:
     registerWithEureka: true
     fetchRegistry: true
